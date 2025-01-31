@@ -26,13 +26,13 @@ def training_args():
     first_milestone = 150  # Milestone for change in lr
     second_milestone = 250  # Milestone for change in lr
 
-    model = "resnet50"
+    model = "wide_resnet"
     sn_coeff = 3.0
-
+    # python train.py  --seed 1 --dataset cifar10 --model wide_resnet  -sn -mod  --coeff 3.0
     parser = argparse.ArgumentParser(
         description="Args for training parameters", formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("--seed", type=int, dest="seed", required=True, help="Seed to use")
+    parser.add_argument("--seed", type=int, dest="seed", required=False,default=1, help="Seed to use")
     parser.add_argument(
         "--dataset", type=str, default=default_dataset, dest="dataset", help="dataset to train on",
     )
@@ -57,14 +57,19 @@ def training_args():
     parser.add_argument("--model", type=str, default=model, dest="model", help="Model to train")
 
     parser.add_argument(
-        "-sn", action="store_true", dest="sn", help="whether to use spectral normalisation during training",
+        "-sn",
+        action="store_true",
+        dest="sn",
+        default=True,  # 设置默认值为 True
+        help="whether to use spectral normalisation during training",
     )
+
     parser.set_defaults(sn=False)
     parser.add_argument(
         "--coeff", type=float, default=sn_coeff, dest="coeff", help="Coeff parameter for spectral normalisation",
     )
     parser.add_argument(
-        "-mod", action="store_true", dest="mod", help="whether to use architectural modifications during training",
+        "-mod", action="store_true", dest="mod",default=True, help="whether to use architectural modifications during training",
     )
     parser.set_defaults(mod=False)
 
